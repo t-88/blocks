@@ -11,18 +11,20 @@
     {:else}
         <h2 class="[Error] Unreachable state"></h2>
     {/if}
-
+    {index}
 </main>
 
 
 
 <script>
-    import {curr_conn , output_conn , input_conn,connections} from "$lib/index.js";
-    import { get } from "svelte/store";
+    import engine from "$lib/engine.js";
+    export let index;  
 
     export let title = "Start";
     export let id = "start";
     export let type = "start_blk";
+
+
 
     export let x;
     export let y;
@@ -36,59 +38,12 @@
 
     function on_pin_select(pe,type){
         let rect = pe.target.getBoundingClientRect();
+        let pos = {
+            x :    rect.x + parseInt(rect.width) / 2,
+            y :    rect.y + parseInt(rect.height) / 2,   
+        };
+        engine.on_pin_selected(type,index,pos);
 
-        if(get(curr_conn) == "") {
-            curr_conn.set(type);
-
-            if(type == "input") {
-                input_conn.set({
-                    x :    rect.x + parseInt(rect.width) / 2,
-                    y :    rect.y + parseInt(rect.height) / 2,
-                })
-            } else if (type == "output") {
-                output_conn.set({
-                    x :    rect.x + parseInt(rect.width) / 2,
-                    y :    rect.y + parseInt(rect.height) / 2,
-                })
-                curr_conn.set(type);
-            } else {
-                throw "[Error] unkown pin type";
-            }
-
-            return;
-
-        }
-
-        curr_conn.set("");
-
-        if(get(curr_conn) == type) {
-            alert("invalid connection");
-            return;  
-        }
-
-        if(type == "input") {
-            input_conn.set({
-                x :    rect.x + parseInt(rect.width) / 2,
-                y :    rect.y + parseInt(rect.height) / 2,
-            })
-        } else if (type == "output") {
-            output_conn.set({
-                x :    rect.x + parseInt(rect.width) / 2,
-                y :    rect.y + parseInt(rect.height) / 2,
-            })
-            curr_conn.set(type);
-        } else {
-            throw "[Error] unkown pin type";
-        }
-
-        connections.update((val) => [...val,{
-            x1 : get(input_conn).x,
-            y1 : get(input_conn).y,
-            x2 : get(output_conn).x,
-            y2 : get(output_conn).y,
-        }]);
-
-        console.log(get(connections));
 
     }
 </script>
