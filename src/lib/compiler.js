@@ -11,10 +11,10 @@ const function_args = [Token.Log];
 
 function js_open_function(func_name) {
     func_name = func_name.slice(0,func_name.length - 1);
-    return `function ${func_name} {\n`;
+    return `(api) => {\n`;
 }
 function js_close_function() {
-    return "}";
+    return "}\n";
 }
 
 
@@ -53,7 +53,7 @@ function js_log_function(logs) {
     let line = "";
     for (let i = 0; i < logs.length; i++) {
         if(logs[i]) {
-            line += `console.log("${logs[i]}")\n` 
+            line += `api.log("${logs[i]}")\n` 
         }
     }
     return line; 
@@ -75,9 +75,6 @@ class BlkzCompiler {
     }
 
     compile(lines) {
-        console.log("compiling...");
-
-
         this.idx = 0;
         this.lines = lines;
         this.code = "";
@@ -87,7 +84,6 @@ class BlkzCompiler {
         }
 
         this.have_compiled_code.set(true);
-        console.log(this.code);
     }
 
     write_line(line,depth = 0,add_new_line = true) {
@@ -140,7 +136,7 @@ class BlkzCompiler {
         this.trasnpiled += "   ".repeat(depth) + line + new_line ? "\n": "";
     }
     trasnpile_to_js() {
-        console.log("transpiling...");
+        if(!this.code) return;
 
         this.lines = this.code.split("\n");
         this.idx = 0;
@@ -163,7 +159,8 @@ class BlkzCompiler {
             this.idx += 1;            
         }   
 
-        console.log(this.trasnpiled);
+
+        return this.trasnpiled;
     }
 }
 

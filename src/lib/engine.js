@@ -5,6 +5,8 @@ import BlkObj from  "./blk.js";
 import blkz_compiler from "./compiler.js";
 import Token from "./tokens.js";
 
+
+
 class Engine {
     constructor() {
         this.blks = writable([]);
@@ -27,7 +29,17 @@ class Engine {
 
         this.cur_blk = writable({});
         this.is_block_selected = writable(false);
+
+
+        this.logs = writable([]);
+
+
+        this.api = {
+            log : (msg) => this.log(msg),
+        };
     }
+
+    
 
     traverse_func(root,blks = undefined,wires = undefined,lines=[]) {
         if(root == undefined) return;
@@ -42,7 +54,6 @@ class Engine {
 
         return lines;
     }   
-
     on_compile() {
         // get start, update blks
         if(!get(this.is_start_blk_placed)) {
@@ -62,7 +73,7 @@ class Engine {
             alert("u must connect a END blk to your start function");
             return;    
         } 
-        blkz_compiler.compile(lines);
+        return blkz_compiler.compile(lines);
 
         
         
@@ -71,8 +82,6 @@ class Engine {
             // let update_blk = get(this.blks)[this.update_blk_idx];
         // }
     }
-
-
     on_pin_selected(type,index,pos) {
         if(get(this.curr_conn) == "") {
             this.curr_conn.set(type);
@@ -140,7 +149,6 @@ class Engine {
 
         this.wires.set(wires);
     }
-
     on_place_blk(x , y) {
         this.blks.update((val) => [...val,
             new BlkObj(
@@ -171,8 +179,16 @@ class Engine {
             id,
        });
     }
+    on_run() {
+        this.on_compile();
+        let js_code = blkz_compiler.trasnpile_to_js();
+        let start_func = eval(js_code);
+        start_func(this.api);
+    }
 
-
+    log(msg) {
+        this.logs.update(val => [...val,msg]);
+    }
 }
 
 
