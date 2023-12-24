@@ -1,23 +1,32 @@
 import { writable } from "svelte/store";
 import { get } from "svelte/store";
 import Wire from "./wire";
+import BlkObj from  "./blk.js";
 
 
 class Engine {
     constructor() {
         this.blks = writable([]);
+
         this.wires = writable({});
         this.wires_table = {};
     
         this.input_conn  = {pos : {x : 0, y : 0}, index : -1}; 
         this.output_conn = {pos : {x : 0, y : 0}, index : -1}; 
         this.curr_conn = writable("");
+
+
+        // every object only uses one of those
+        this.start_blk = writable(false);
+        this.update_blk = writable(false);
+
+
+        this.cur_blk = writable({});
+        this.is_block_selected = writable(false);
     }
 
 
     on_pin_selected(type,index,pos) {
-        console.log(this.wires_table)
-
         if(get(this.curr_conn) == "") {
             this.curr_conn.set(type);
 
@@ -82,10 +91,34 @@ class Engine {
             in : this.input_conn.index,
         };
 
-
         this.wires.set(wires);
-        console.log(get(this.wires));
     }
+
+    on_place_blk(x , y) {
+        this.blks.update((val) => [...val,
+            new BlkObj(x,y,get(this.cur_blk).type,get(this.cur_blk).title,get(this.cur_blk).id),
+        ]);
+        this.is_block_selected.set(false);
+
+        console.log(get(this.cur_blk));
+        if(get(this.cur_blk).id == "start") {
+            this.start_blk.set(true);
+        }
+        if(get(this.cur_blk).id == "update") {
+            this.update_blk.set(true);
+        }
+
+    }
+    on_select_blk(type,title,id) {
+        this.is_block_selected.set(true);
+        this.cur_blk.set({
+            type,
+            title,
+            id,
+       });
+    }
+
+
 }
 
 

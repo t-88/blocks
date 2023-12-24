@@ -1,4 +1,4 @@
-<button on:click={() => {callback(type,title,id)}}> {title}  </button>
+<button disabled={disabled} on:click={() => {callback(type,title,id)}}> {title}  </button>
 
 
 
@@ -8,6 +8,7 @@
     export let type = "start_blk"
     export let callback = "start_blk"
 
+    export let disabled = false;
 
 </script>
 

@@ -18,7 +18,7 @@
     {/each}
 
     {#if canvas_is_blk_selected} 
-        <Blk index={-1} x={mouse_x} y={mouse_y} title={get(cur_blk).title} id={get(cur_blk).id} type={get(cur_blk).type} />
+        <Blk index={-1} x={mouse_x} y={mouse_y} title={get(engine.cur_blk).title} id={get(engine.cur_blk).id} type={get(engine.cur_blk).type} />
     {/if}
 </main>
 
@@ -28,13 +28,8 @@
     import Blk from "./blocks/blk.svelte";
 
     // state
-    import {is_block_selected , cur_blk} from "$lib/index.js";
-    
     import { onMount } from "svelte";
     import { get } from "svelte/store";
-
-
-    import BlkObj from "$lib/blk.js";
     import engine from "$lib/engine.js";
 
 
@@ -53,7 +48,7 @@
     let canvas_rect = {x : 0 ,y : 0 ,w : 0 ,h : 0};
 
     let canvas_is_blk_selected = false;
-    is_block_selected.subscribe((val) => {
+    engine.is_block_selected.subscribe((val) => {
         canvas_is_blk_selected = val;
     });
 
@@ -69,13 +64,7 @@
 
         main_ref.addEventListener("mousedown",(event) => {
             if(!canvas_is_blk_selected) return;
-            
-            
-            engine.blks.update((val) => [...val,
-                new BlkObj(mouse_x,mouse_y,get(cur_blk).type,get(cur_blk).title,get(cur_blk).id),
-            ]);
-
-            is_block_selected.set(false);
+            engine.on_place_blk(mouse_x,mouse_y);
         });        
     });
 
