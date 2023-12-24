@@ -2,7 +2,8 @@ import { writable } from "svelte/store";
 import { get } from "svelte/store";
 import Wire from "./wire";
 import BlkObj from  "./blk.js";
-
+import blkz_compiler from "./compiler.js";
+import Token from "./tokens.js";
 
 class Engine {
     constructor() {
@@ -43,19 +44,29 @@ class Engine {
     }   
 
     on_compile() {
-        console.log("compiling...");
 
         // get start, update blks
-        if(!get(this.is_start_blk_placed) && !get(this.is_update_blk_placed)) {
-            alert("u got to place at least update or start blk");
+        if(!get(this.is_start_blk_placed)) {
+            alert("u got to place at least start blk");
         } 
 
-        if(get(this.is_start_blk_placed)) {
-            let start_blk = get(this.blks)[this.start_blk_idx];
-            let lines = this.traverse_func(start_blk);
-            console.log(lines);
+        // if no start blk found exit
+        if(!get(this.is_start_blk_placed)) {
+            return;
         }
+        
+        let start_blk = get(this.blks)[this.start_blk_idx];
+        let lines = this.traverse_func(start_blk);
 
+        // make sure end blk is placed and connected to
+        if(lines[lines.length - 1].id != "end") {
+            alert("u must connect a END blk to your start function");
+            return;    
+        } 
+        blkz_compiler.compile(lines);
+
+        
+        
         // make it work for start function first
         // if(get(this.is_update_blk_placed)) {
             // let update_blk = get(this.blks)[this.update_blk_idx];
@@ -141,11 +152,11 @@ class Engine {
         ]);
         this.is_block_selected.set(false);
 
-        if(get(this.cur_blk).id == "start") {
+        if(get(this.cur_blk).id == Token.Start) {
             this.is_start_blk_placed.set(true);
             this.start_blk_idx = get(this.blks).length - 1 ;
         }
-        if(get(this.cur_blk).id == "update") {
+        if(get(this.cur_blk).id == Token.Update) {
             this.is_update_blk_placed.set(true);
             this.update_blk_idx = get(this.blks).length - 1 ;
         }
