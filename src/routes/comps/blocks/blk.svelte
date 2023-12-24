@@ -11,7 +11,6 @@
     {:else}
         <h2 class="[Error] Unreachable state"></h2>
     {/if}
-    {index}
 </main>
 
 
@@ -79,6 +78,7 @@
         background-color: black;
 
         border-radius: 100%;
+        z-index: 2;
     }
     .connector:hover {
         background-color: blueviolet;

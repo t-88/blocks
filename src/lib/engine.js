@@ -25,6 +25,10 @@ class Engine {
         this.is_block_selected = writable(false);
     }
 
+    on_compile() {
+        console.log("compiling...");
+    }
+
 
     on_pin_selected(type,index,pos) {
         if(get(this.curr_conn) == "") {

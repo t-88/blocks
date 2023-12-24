@@ -20,6 +20,8 @@
     {#if canvas_is_blk_selected} 
         <Blk index={-1} x={mouse_x} y={mouse_y} title={get(engine.cur_blk).title} id={get(engine.cur_blk).id} type={get(engine.cur_blk).type} />
     {/if}
+
+
 </main>
 
 
@@ -88,5 +90,8 @@
         overflow: visible;
         width: 100%;
         height: 100%;
+
+        pointer-events: none;
+        z-index: 2;
     }
 </style>

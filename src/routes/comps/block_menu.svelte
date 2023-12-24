@@ -3,6 +3,8 @@
     <BlkBtn callback={on_select_blk} disabled={is_update_blk_placed}  id="update" title="Update"  type="start_blk" />
     <BlkBtn callback={on_select_blk}  id="log" title="Log()"      type="middle_blk" />
     <BlkBtn callback={on_select_blk}  id="end" title="End"        type="end_blk" />
+
+    <button on:click={engine.on_compile} >Compile</button>
 </main>
 
 <script>
@@ -11,7 +13,6 @@
 
     // state 
     import engine from "$lib/engine.js";
-    import { get } from "svelte/store";
 
 
     let is_start_blk_placed = false;
@@ -35,5 +36,13 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+    }
+
+    button {
+        align-self: center;
+        width: 100px;
+        height: 50px;
+        border-radius: 5px;
+        cursor: pointer;
     }
 </style>
