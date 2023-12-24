@@ -4,7 +4,7 @@
     <BlkBtn callback={on_select_blk}  id="log" title="Log()"      type="middle_blk" />
     <BlkBtn callback={on_select_blk}  id="end" title="End"        type="end_blk" />
 
-    <button on:click={engine.on_compile} >Compile</button>
+    <button on:click={() => engine.on_compile()} >Compile</button>
 </main>
 
 <script>
@@ -17,8 +17,8 @@
 
     let is_start_blk_placed = false;
     let is_update_blk_placed = false;
-    engine.start_blk.subscribe(val => is_start_blk_placed = val);
-    engine.update_blk.subscribe(val => is_update_blk_placed = val);
+    engine.is_start_blk_placed.subscribe(val => is_start_blk_placed = val);
+    engine.is_update_blk_placed.subscribe(val => is_update_blk_placed = val);
 
     function on_select_blk(type,title,id) {
         engine.on_select_blk(type,title,id);

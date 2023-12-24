@@ -17,16 +17,49 @@ class Engine {
 
 
         // every object only uses one of those
-        this.start_blk = writable(false);
-        this.update_blk = writable(false);
+        this.is_start_blk_placed = writable(false);
+        this.is_update_blk_placed = writable(false);
+
+        this.start_blk_idx = -1;
+        this.update_blk_idx = -1;
 
 
         this.cur_blk = writable({});
         this.is_block_selected = writable(false);
     }
 
+    traverse_func(root,blks = undefined,wires = undefined,lines=[]) {
+        if(root == undefined) return;
+        if(wires == undefined) wires = get(this.wires);
+        if(blks  == undefined) blks = get(this.blks);
+
+        lines.push(root.line());
+
+        if(Object.keys(wires).includes(root.index.toString())) {
+            this.traverse_func(blks[wires[root.index].in],blks,wires,lines)
+        }
+
+        return lines;
+    }   
+
     on_compile() {
         console.log("compiling...");
+
+        // get start, update blks
+        if(!get(this.is_start_blk_placed) && !get(this.is_update_blk_placed)) {
+            alert("u got to place at least update or start blk");
+        } 
+
+        if(get(this.is_start_blk_placed)) {
+            let start_blk = get(this.blks)[this.start_blk_idx];
+            let lines = this.traverse_func(start_blk);
+            console.log(lines);
+        }
+
+        // make it work for start function first
+        // if(get(this.is_update_blk_placed)) {
+            // let update_blk = get(this.blks)[this.update_blk_idx];
+        // }
     }
 
 
@@ -100,17 +133,24 @@ class Engine {
 
     on_place_blk(x , y) {
         this.blks.update((val) => [...val,
-            new BlkObj(x,y,get(this.cur_blk).type,get(this.cur_blk).title,get(this.cur_blk).id),
+            new BlkObj(
+                        get(this.cur_blk).type,get(this.cur_blk).title,get(this.cur_blk).id,
+                        val.length,
+                        x,y
+                       ),
         ]);
         this.is_block_selected.set(false);
 
-        console.log(get(this.cur_blk));
         if(get(this.cur_blk).id == "start") {
-            this.start_blk.set(true);
+            this.is_start_blk_placed.set(true);
+            this.start_blk_idx = get(this.blks).length - 1 ;
         }
         if(get(this.cur_blk).id == "update") {
-            this.update_blk.set(true);
+            this.is_update_blk_placed.set(true);
+            this.update_blk_idx = get(this.blks).length - 1 ;
         }
+
+
 
     }
     on_select_blk(type,title,id) {

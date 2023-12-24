@@ -3,11 +3,7 @@ import BlkBtn from "../routes/comps/blocks/blk.svelte";
 
 
 class BlkObj {
-    constructor(x = 0,y = 0,type,title,id) {
-        this.input_connection =  writable(undefined);
-        this.output_connection = writable(undefined);
-
-        
+    constructor(type,title,id,index,x = 0,y = 0) {
         this.pos = writable({x : x, y : y});
 
         this.type = type;
@@ -15,6 +11,17 @@ class BlkObj {
         this.title = title;
 
         this.elem = BlkBtn;
+
+        this.index = index;
+    }
+
+    line() {
+        // every blk repersents a line of code
+        // line function returns its data
+
+        return {
+            id : this.id,
+        }
     }
 }
 
