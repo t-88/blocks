@@ -44,7 +44,6 @@ class Engine {
     }   
 
     on_compile() {
-
         // get start, update blks
         if(!get(this.is_start_blk_placed)) {
             alert("u got to place at least start blk");

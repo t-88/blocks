@@ -7,7 +7,7 @@ this readme will be my guide to creating the language, i deside the synatx here.
 ## Synatx
 ### Basic hello world program
 ```
-    start {
+    start:
         log "hello world"
-    }
+    .
 ```

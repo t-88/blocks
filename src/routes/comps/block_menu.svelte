@@ -29,6 +29,7 @@ import blkz_compiler from "$lib/compiler.js";
 
     function on_select_blk(type,title,id) {
         engine.on_select_blk(type,title,id);
+
     }
 
 </script>
