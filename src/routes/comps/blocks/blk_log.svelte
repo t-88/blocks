@@ -1,24 +1,20 @@
 <main style={style}>
     <div>
         <h3>{title}</h3> 
-        <button on:click={add_arg}> + </button>
-        {#if index != -1}
+        {#if $params.length == 0 }
+            <button on:click={add_arg}> + </button>
+        {/if}
+
+        <!-- {#if index != -1}
             {#each $params as value}
                 <input bind:this={value} type="text">
             {/each}
-        {/if}
+        {/if} -->
     </div>
 
-    {#if type == "start_blk"}
-        <div on:click={(pe) => on_pin_select(pe,"output")} class="connector connector_next"></div>
-    {:else if type == "middle_blk"}
-        <div on:click={(pe) => on_pin_select(pe,"output")} class="connector connector_next"></div>
-        <div on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_prev"></div>
-        {:else if type == "end_blk"}
-        <div on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_prev"></div>
-    {:else}
-        <h2 class="[Error] Unreachable state"></h2>
-    {/if}
+    <div role="presentation" on:click={(pe) => on_pin_select(pe,"output")} class="connector connector_next"></div>
+    <div role="presentation" on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_prev"></div>
+    <div role="presentation" on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_right90we "></div>
 
 </main>
 
@@ -32,8 +28,6 @@
     export let index = 0;  
 
     export let title = "Start";
-    export let type = "start_blk";
-
 
     export let x;
     export let y;
@@ -56,10 +50,13 @@
     }
 
     function add_arg() {
+
+        // only one arg
+        if(get(params).length != 0) return
+
         // a way to conenct blk params state to rendered blk
         // array are like points in js i think so i just create a element in params array 
         // and bind it to the input 
-
         get(engine.blks)[index].params.push(" ");
         params.set(get(engine.blks)[index].params);
     }

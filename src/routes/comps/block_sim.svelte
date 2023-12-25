@@ -1,18 +1,30 @@
 <main>
     <div>
         <h2>block sim</h2>
+        <canvas bind:this={canvas} height="500">
+
+        </canvas>
         <button on:click={on_run}>Run</button>
     </div>
     <Console />
 </main>
 
 <script>
-    import Console from "./console.svelte";
+    import Console from "./console.svelte"
     import engine from "$lib/engine.js";
+    import { onMount } from "svelte";
 
     function on_run() {
         engine.on_run();
     }
+
+
+    let canvas  = undefined;
+    let ctx = undefined;
+    onMount(() => {
+        ctx = canvas.getContext("2d");
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+    });
 </script>
 
 <style>

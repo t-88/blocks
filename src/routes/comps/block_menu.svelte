@@ -1,11 +1,20 @@
 <main>
-    <BlkBtn callback={on_select_blk} disabled={is_start_blk_placed}  id={Token.Start} title="Start"    type="start_blk" />
-    <BlkBtn callback={on_select_blk} disabled={is_update_blk_placed}  id={Token.Update} title="Update"  type="start_blk" />
-    <BlkBtn callback={on_select_blk}  id="log" title={Token.Log}      type="middle_blk" />
-    <BlkBtn callback={on_select_blk}  id="end" title={Token.End}        type="end_blk" />
+    <section id="menu-btns">
+        <BlkBtn callback={on_select_blk} disabled={is_start_blk_placed}  id={Token.Start} title="Start"    type="start_blk" />
+        <BlkBtn callback={on_select_blk} disabled={is_update_blk_placed}  id={Token.Update} title="Update"  type="start_blk" />
+        <BlkBtn callback={on_select_blk}  id="log" title={Token.Log}      type="middle_blk" />
+        <BlkBtn callback={on_select_blk}  id="end" title={Token.End}        type="end_blk" />
+    </section>
+    <section>
+        <button on:click={() => engine.on_compile()} >Compile</button>
+        <button disabled={!have_compiled_code} on:click={() => blkz_compiler.trasnpile_to_js()} >Transpile To JS</button>
 
-    <button on:click={() => engine.on_compile()} >Compile</button>
-    <button disabled={!have_compiled_code} on:click={() => blkz_compiler.trasnpile_to_js()} >Transpile To JS</button>
+        <div id="menu-windows">
+            <button disabled>1</button>
+            <button>2</button>
+            <button>3</button>
+        </div>
+    </section>
 </main>
 
 <script>
@@ -14,7 +23,7 @@
 
     // state 
     import engine from "$lib/engine.js";
-import blkz_compiler from "$lib/compiler.js";
+    import blkz_compiler from "$lib/compiler.js";
     import Token from "$lib/tokens.js";
 
 
@@ -36,13 +45,14 @@ import blkz_compiler from "$lib/compiler.js";
 
 <style>
     main {
-        width: 20%;
+        max-width: 20%;
         border: black 1px solid;
         padding: 20px;
         
 
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: 10px;
     }
 
@@ -52,5 +62,17 @@ import blkz_compiler from "$lib/compiler.js";
         height: 50px;
         border-radius: 5px;
         cursor: pointer;
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;        
+        gap: 10px;
+    }
+
+    #menu-windows {
+        height: 50px;
+        display: flex;
     }
 </style>

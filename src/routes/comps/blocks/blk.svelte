@@ -2,14 +2,14 @@
     <h3>{title}</h3> 
 
     {#if type == "start_blk"}
-        <div on:click={(pe) => on_pin_select(pe,"output")} class="connector connector_next"></div>
+        <div role="presentation" on:click={(pe) => on_pin_select(pe,"output")} class="connector connector_next"></div>
     {:else if type == "middle_blk"}
-        <div on:click={(pe) => on_pin_select(pe,"output")} class="connector connector_next"></div>
-        <div on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_prev"></div>
+        <div role="presentation" on:click={(pe) => on_pin_select(pe,"output")} class="connector connector_next"></div>
+        <div role="presentation" on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_prev"></div>
         {:else if type == "end_blk"}
-        <div on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_prev"></div>
+        <div role="presentation" on:click={(pe) => on_pin_select(pe,"input")} class="connector connector_prev"></div>
     {:else}
-        <h2 class="[Error] Unreachable state"></h2>
+        <h2>[Error] Unreachable state</h2>
     {/if}
 </main>
 
@@ -20,7 +20,6 @@
     export let index;  
 
     export let title = "Start";
-    export let id = "start";
     export let type = "start_blk";
 
 
