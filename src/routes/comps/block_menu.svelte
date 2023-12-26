@@ -1,9 +1,10 @@
 <main>
     <section id="menu-btns">
-        <BlkBtn callback={on_select_blk} disabled={is_start_blk_placed}  id={Token.Start} title="Start"    type="start_blk" />
-        <BlkBtn callback={on_select_blk} disabled={is_update_blk_placed}  id={Token.Update} title="Update"  type="start_blk" />
-        <BlkBtn callback={on_select_blk}  id="log" title={Token.Log}      type="middle_blk" />
-        <BlkBtn callback={on_select_blk}  id="end" title={Token.End}        type="end_blk" />
+        <BlkBtn disabled={is_start_blk_placed}  id={Token.Start}/>
+        <BlkBtn disabled={is_update_blk_placed}  id={Token.Update}/>
+        <BlkBtn  id={Token.Log}/>
+        <BlkBtn  id={Token.End}/>
+        <BlkBtn  id={Token.Varaible}/>
     </section>
     <section>
         <button on:click={() => engine.on_compile()} >Compile</button>
@@ -21,6 +22,7 @@
     // comps
     import BlkBtn from "./blk_btn.svelte";
 
+
     // state 
     import engine from "$lib/engine.js";
     import blkz_compiler from "$lib/compiler.js";
@@ -35,12 +37,6 @@
 
     let have_compiled_code = false;
     blkz_compiler.have_compiled_code.subscribe(val => have_compiled_code = val);
-
-    function on_select_blk(type,title,id) {
-        engine.on_select_blk(type,title,id);
-
-    }
-
 </script>
 
 <style>

@@ -13,12 +13,12 @@
     </svg>
 
 
-    {#each canvas_blks as blk, index}
-        <svelte:component this={blk.elem} index={index} x={get(blk.pos).x} y={get(blk.pos).y} title={blk.title} id={blk.id} type={blk.type} />
+    {#each canvas_blks as blk}
+        <svelte:component this={blk.elem} blk={blk}/>
     {/each}
 
     {#if canvas_is_blk_selected} 
-        <Blk index={-1} x={mouse_x} y={mouse_y} title={get(engine.cur_blk).title} id={get(engine.cur_blk).id} type={get(engine.cur_blk).type} />
+        <ShadowBlk x={mouse_x} y={mouse_y} blk={get(engine.cur_blk)}  />
     {/if}
 
 
@@ -27,7 +27,8 @@
 
 <script>
     //comps
-    import Blk from "./blocks/blk.svelte";
+    import ShadowBlk from "./blocks/shadow_blk.svelte";
+    
 
     // state
     import { onMount } from "svelte";
@@ -59,13 +60,13 @@
             let rect = main_ref.getBoundingClientRect();
             canvas_rect = {x : rect.x ,y : rect.y ,w : rect.width ,h : rect.height};
 
-
             mouse_x = event.pageX - rect.x;
             mouse_y = event.pageY - rect.y;
         });
 
         main_ref.addEventListener("mousedown",(event) => {
             if(!canvas_is_blk_selected) return;
+
             engine.on_place_blk(mouse_x,mouse_y);
         });        
     });

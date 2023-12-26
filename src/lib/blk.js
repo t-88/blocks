@@ -1,28 +1,30 @@
-import { writable } from "svelte/store"
 import Blk from "../routes/comps/blocks/blk.svelte";
-import Blk_Log from "../routes/comps/blocks/blk_log.svelte";
-import Token from "./tokens";
+import Blk_Variable from "../routes/comps/blocks/blk_variable.svelte";
+import Token, { token_to_blk_type } from "./tokens";
+
+
 
 // every blks has it own elems 
 const blk_elements = {};
-blk_elements[Token.Log] = Blk_Log;
+blk_elements[Token.Varaible] = Blk_Variable;
 
 class BlkObj {
-    constructor(type,title,id,index,x = 0,y = 0) {
-        this.pos = writable({x : x, y : y});
+    constructor(id,title,index,x = 0,y = 0) {
+        this.x = x;
+        this.y = y;
         this.params =  [];
 
-        this.type = type;
+        this.index = index;
         this.id = id;
         this.title = title;
+        this.blk_type = token_to_blk_type(id); 
 
-        if(Object.keys(blk_elements).includes(id)) {
-            this.elem = blk_elements[id];
+
+        if(blk_elements.hasOwnProperty(this.id)) {
+            this.elem = blk_elements[this.id];
         } else {
             this.elem = Blk;
         }
-
-        this.index = index;
     }
 
     line() {

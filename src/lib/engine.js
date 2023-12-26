@@ -3,12 +3,14 @@ import { get } from "svelte/store";
 import Wire from "./wire";
 import BlkObj from  "./blk.js";
 import blkz_compiler from "./compiler.js";
-import Token from "./tokens.js";
+import Token, { init_tokens_to_blks_map } from "./tokens.js";
 
 
 
 class Engine {
     constructor() {
+        init_tokens_to_blks_map();
+        
         this.blks = writable([]);
 
         this.wires = writable({});
@@ -152,13 +154,18 @@ class Engine {
     on_place_blk(x , y) {
         this.blks.update((val) => [...val,
             new BlkObj(
-                        get(this.cur_blk).type,get(this.cur_blk).title,get(this.cur_blk).id,
-                        val.length,
-                        x,y
-                       ),
+                get(this.cur_blk).id,
+                get(this.cur_blk).title,
+                val.length,
+                x,
+                y
+            ),
         ]);
+
         this.is_block_selected.set(false);
 
+        // extract the indices of the start and update block 
+        // they are important
         if(get(this.cur_blk).id == Token.Start) {
             this.is_start_blk_placed.set(true);
             this.start_blk_idx = get(this.blks).length - 1 ;
@@ -167,18 +174,13 @@ class Engine {
             this.is_update_blk_placed.set(true);
             this.update_blk_idx = get(this.blks).length - 1 ;
         }
-
-
-
     }
-    on_select_blk(type,title,id) {
+    
+    on_select_blk(id,title) {
         this.is_block_selected.set(true);
-        this.cur_blk.set({
-            type,
-            title,
-            id,
-       });
+        this.cur_blk.set(new BlkObj(id,title,-1));
     }
+
     on_run() {
         this.on_compile();
         let js_code = blkz_compiler.trasnpile_to_js();
